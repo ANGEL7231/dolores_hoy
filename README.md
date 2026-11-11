@@ -17,20 +17,3 @@ flutter test
 
 # 4. Ejecutar con tu clave (edita secrets.json; NUNCA lo subas a git)
 flutter run --dart-define-from-file=secrets.json
-```
-
-## Android
-Verifica que `android/app/src/main/AndroidManifest.xml` tenga:
-`<uses-permission android:name="android.permission.INTERNET"/>`
-y **no** actives `usesCleartextTraffic`.
-
-## Versión final ofuscada
-```bash
-flutter build apk --obfuscate --split-debug-info=build/simbolos --dart-define-from-file=secrets.json
-```
-
-## Estructura
-- `lib/dominio/`: excepciones con mensajes seguros y modelos.
-- `lib/datos/`: `ClienteSeguro` (única puerta a internet), `ConfigClaves`, un servicio por API.
-- `lib/presentacion/`: `TableroViewModel` (estado independiente por API) y pantalla.
-- `test/`: cliente, servicios, seguridad y viewmodel.
