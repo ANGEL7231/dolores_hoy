@@ -30,8 +30,10 @@ void main() {
   });
 
   test('si UNA api falla, las otras cuatro siguen funcionando', () async {
-    final vm = crear((r) async =>
-        r.url.host == 'api.nasa.gov' ? jsonOk({}, 500) : servidorFalso(r));
+    final vm = crear((r) async {
+      if (r.url.host == 'api.nasa.gov') return jsonOk({}, 500);
+      return servidorFalso(r);
+    });
     await vm.cargarTodo();
     expect(vm.nasa.estado, Estado.error);
     expect(vm.nasa.error, contains('500'));
@@ -39,7 +41,7 @@ void main() {
     expect(vm.cambio.estado, Estado.listo);
     expect(vm.wiki.estado, Estado.listo);
   });
-
+  
   test('sin internet, todas muestran error pero la app no se cae', () async {
     final vm = crear((_) async => throw Exception('sin red'));
     await vm.cargarTodo();
